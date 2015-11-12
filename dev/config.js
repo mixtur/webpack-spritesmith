@@ -1,0 +1,42 @@
+var path = require('path');
+
+var SpritesmithPlugin = require('../lib/Plugin');
+
+module.exports = {
+    entry: path.resolve(__dirname, 'src/entry.js'),
+
+    output: {
+        path: path.resolve(__dirname, 'build'),
+        filename: 'bundle.js'
+    },
+
+    module: {
+        loaders: [
+            {test: /\.styl$/, loaders: [
+                'style',
+                'css',
+                'stylus'
+            ]},
+            {test: /\.png$/, loaders: [
+                'file'
+            ]}
+        ]
+    },
+
+    resolve: {
+        modulesDirectories: ["web_modules", "node_modules", "generated"]
+    },
+
+    plugins: [
+        new SpritesmithPlugin({
+            src: {
+                cwd: path.resolve(__dirname, 'src'),
+                glob: '**/ico/*.png'
+            },
+            target: {
+                image: path.resolve(__dirname, 'src/generated/sprite.png'),
+                css: path.resolve(__dirname, 'src/generated/sprite.styl')
+            }
+        })
+    ]
+};
