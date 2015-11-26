@@ -2,7 +2,7 @@ Braindead webpack plugin that converts set of images into a spritesheet and SASS
 
 All ideas are shamelessly taken from [gulp.spritesmith](https://github.com/twolfson/gulp.spritesmith).
 
-###Example
+### Example
 
 Let's say you have following folder structure
 
@@ -82,7 +82,7 @@ And then just use it
 
 ```
 
-###Options
+### Options
 
 - `src` - used to build list of source images
     - `cwd` should be the closest common directory for all source images;
@@ -104,7 +104,7 @@ And then just use it
     
 `spritesheetTemplatesOptions.format` - usually derived from file extension in `target.css`, but can be specified explicitly
 
-###How it works
+### How it works
 
 Plugin reads list of files based on `src.cwd` and `src.glob`, and then uses it to produce two files. 
 Spritesheet itself with filename `target.image` ([spritesmith](https://github.com/Ensighten/spritesmith) is responsible for that part).
