@@ -69,7 +69,7 @@ And then just use it
 
 ###Options
 
-- `src` - used to build list of source png images
+- `src` - used to build list of source images
     - `cwd` should be the closest common directory for all source images;
     - `glob` well... it is a glob
 
@@ -82,3 +82,10 @@ And then just use it
 - `spritesheetTemplatesOptions` - optional. Options for [spritesheet-templates](https://github.com/twolfson/spritesheet-templates)
     
 `spritesheetTemplatesOptions.format` - usually derived from file extension in `target.css`, but can be specified explicitly
+
+###How it works
+
+Plugin reads list of files based on `src.cwd` and `src.glob`, and then uses it to produce two files. 
+Spritesheet itself with filename `target.image` ([spritesmith](https://github.com/Ensighten/spritesmith) is responsible for that part).
+And some API with filename `target.css` ([spritesmith](https://github.com/Ensighten/spritesmith) and [spritesheet-templates](https://github.com/twolfson/spritesheet-templates) are both involved here, first produces coordinates and second generates API).
+
