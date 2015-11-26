@@ -70,8 +70,10 @@ style.styl
 
 - `src` - used to build list of source png images
     - `cwd` should be the closest common directory for all source images;
-    - `glob` well... it is glob
-    `cwd` and `glob` both will be passed directly to [glob](https://github.com/isaacs/node-glob) (and [gaze](https://github.com/shama/gaze) in watch mode), then results will be used as list of source images 
+    - `glob` well... it is a glob
+
+    `cwd` and `glob` both will be passed directly to [glob](https://github.com/isaacs/node-glob) (and [gaze](https://github.com/shama/gaze) in watch mode), then results will be used as list of source images
+
 - `target` - generated files
     - `image` - target image filename
     - `css` - target spritesheet filename, can be css, stylus, less or sass file
