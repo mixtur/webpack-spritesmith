@@ -18,7 +18,7 @@ module.exports = {
                 'stylus'
             ]},
             {test: /\.png$/, loaders: [
-                'file'
+                'file?name=i/[hash].[ext]'
             ]}
         ]
     },
@@ -36,6 +36,15 @@ module.exports = {
             target: {
                 image: path.resolve(__dirname, 'src/generated/sprite.png'),
                 css: path.resolve(__dirname, 'src/generated/sprite.styl')
+            },
+            apiOptions: {
+                generateSpriteName: function (fileName) {
+                    var parsed = path.parse(fileName);
+                    var dir = parsed.dir.split(path.sep);
+                    var moduleName = dir[dir.length - 2];
+                    return moduleName + '__' + parsed.name;
+                },
+                cssImageRef: '~sprite.png'
             }
         })
     ]
