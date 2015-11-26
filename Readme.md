@@ -20,10 +20,11 @@ Let's say you have following folder structure
 
 ```
 
-Then you need to instantiate plugin in webpack.config.js like this:
+Then you need to instantiate plugin in webpack config like this:
 
 ```javascript
 
+//webpack.config.js
 var path = require('path');
 
 var SpritesmithPlugin = require('webpack-spritesmith');
@@ -36,7 +37,7 @@ module.exports = {
     plugins: [
         new SpritesmithPlugin({
             src: {
-                cwd: path.resolve(__dirname, 'src', 'ico'),
+                cwd: path.resolve(__dirname, 'src/ico'),
                 glob: '*.png'
             },
             target: {
@@ -53,10 +54,10 @@ module.exports = {
 
 And then just use it
 
-style.styl
 
 ```stylus
 
+//style.styl
 @import '~sprite.styl'
 
 .close-button
