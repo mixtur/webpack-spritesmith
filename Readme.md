@@ -1,4 +1,4 @@
-Braindead webpack plugin that converts set of images into a spritesheet and SASS/LESS/Stylus mixins, using [spritesmith](https://github.com/Ensighten/spritesmith) and [spritesheet-templates](https://github.com/twolfson/spritesheet-templates) 
+Webpack plugin that converts set of images into a spritesheet and SASS/LESS/Stylus mixins, using [spritesmith](https://github.com/Ensighten/spritesmith) and [spritesheet-templates](https://github.com/twolfson/spritesheet-templates) 
 
 All ideas are shamelessly taken from [gulp.spritesmith](https://github.com/twolfson/gulp.spritesmith).
 
@@ -82,7 +82,7 @@ And then just use it
 
 ```
 
-### Options
+### Config
 
 - `src` - used to build list of source images
     - `cwd` should be the closest common directory for all source images;
