@@ -106,6 +106,8 @@ And then just use it
 
 ### How it works
 
-Plugin reads list of files based on `src.cwd` and `src.glob`, and then uses it to produce two files. 
-Spritesheet itself with filename `target.image` ([spritesmith](https://github.com/Ensighten/spritesmith) is responsible for that part).
-And some API with filename `target.css` ([spritesmith](https://github.com/Ensighten/spritesmith) and [spritesheet-templates](https://github.com/twolfson/spritesheet-templates) are both involved here, first produces coordinates and second generates API).
+Plugin eats list of images in form of glob (`config.src.cwd`, `config.src.glob`), and spits out two files: spritesheet (`config.target.image`) and some API (`config.target.css`) in format that [spritesheet-templates](https://github.com/twolfson/spritesheet-templates) can produce (CSS/SASS/LESS/Stylus in time of writing this).
+These files are expected to be used as source files in your project.
+
+Basically plugin simply wires together [webpack](http://webpack.github.io/), [spritesmith](https://github.com/Ensighten/spritesmith) and [spritesheet-templates](https://github.com/twolfson/spritesheet-templates).
+The only piece of logic it does by itself is determining which format to use judging by file extension in `config.target.css`.
