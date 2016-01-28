@@ -1,6 +1,6 @@
 {
   "name": "webpack-spritesmith",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "main": "lib/Plugin.js",
   "scripts": {
@@ -29,7 +29,7 @@
     "lodash": "^3.10.1",
     "mkdirp": "^0.5.1",
     "spritesheet-templates": "^10.0.0",
-    "spritesmith": "^1.5.0"
+    "spritesmith": "^3.0.1"
   },
   "devDependencies": {
     "css-loader": "^0.22.0",
