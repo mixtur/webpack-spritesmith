@@ -1,6 +1,7 @@
 [![npm](https://img.shields.io/npm/v/webpack-spritesmith.svg)](https://www.npmjs.com/package/webpack-spritesmith)
 
-Webpack plugin that converts set of images into a spritesheet and SASS/LESS/Stylus mixins, using [spritesmith](https://github.com/Ensighten/spritesmith) and [spritesheet-templates](https://github.com/twolfson/spritesheet-templates) 
+Webpack plugin that converts set of images into a spritesheet and SASS/LESS/Stylus mixins, using
+[spritesmith](https://github.com/Ensighten/spritesmith) and [spritesheet-templates](https://github.com/twolfson/spritesheet-templates) 
 
 All ideas are shamelessly taken from [gulp.spritesmith](https://github.com/twolfson/gulp.spritesmith).
 
@@ -84,13 +85,22 @@ And then just use it
 
 ```
 
+There are few things to notice in config
+
+- file-loader used for generated image
+- `resolve` contains location of where generated image is
+- cssImageRef is specified as '~sprite.png'
+
+So the way generated image is accessed from generated API at the moment has to be specified manually.
+
 ### Config
 
 - `src` - used to build list of source images
     - `cwd` should be the closest common directory for all source images;
     - `glob` well... it is a glob
 
-    `cwd` and `glob` both will be passed directly to [glob](https://github.com/isaacs/node-glob) (and [gaze](https://github.com/shama/gaze) in watch mode), then results will be used as list of source images
+    `cwd` and `glob` both will be passed directly to [glob](https://github.com/isaacs/node-glob) (and [gaze](https://github.com/shama/gaze)
+    in watch mode), then results will be used as list of source images
 
 - `target` - generated files
     - `image` - target image filename
@@ -108,8 +118,15 @@ And then just use it
 
 ### How it works
 
-Plugin eats list of images in form of glob (`config.src.cwd`, `config.src.glob`), and spits out two files: spritesheet (`config.target.image`) and some API (`config.target.css`) in format that [spritesheet-templates](https://github.com/twolfson/spritesheet-templates) can produce (CSS/SASS/LESS/Stylus in time of writing this).
+Plugin eats list of images in form of glob (`config.src.cwd`, `config.src.glob`), and spits out two files: spritesheet
+(`config.target.image`) and some API (`config.target.css`) in format that [spritesheet-templates](https://github.com/twolfson/spritesheet-templates) can produce.
 These files are expected to be used as source files in your project.
 
-Basically plugin simply wires together [webpack](http://webpack.github.io/), [spritesmith](https://github.com/Ensighten/spritesmith) and [spritesheet-templates](https://github.com/twolfson/spritesheet-templates).
+Basically plugin simply wires together [webpack](http://webpack.github.io/), [spritesmith](https://github.com/Ensighten/spritesmith)
+and [spritesheet-templates](https://github.com/twolfson/spritesheet-templates).
 The only piece of logic it does by itself is determining which format to use judging by file extension in `config.target.css`.
+
+
+*My English sucks*
+
+*So if anyone bleeding from eyes seeing this readme please do not hesitate with improving it.*
