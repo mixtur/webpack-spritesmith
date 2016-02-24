@@ -45,7 +45,8 @@ module.exports = {
                     return moduleName + '__' + parsed.name;
                 },
                 cssImageRef: '~sprite.png'
-            }
+            },
+            retina: '@2x'
         })
     ]
 };
