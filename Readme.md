@@ -112,9 +112,22 @@ So the way generated image is accessed from generated API at the moment has to b
     use filename (without dirname and extension)
     - `cssImageRef` - path by which generated image will be referenced in API 
 - `spritesmithOptions` - optional. Options for [spritesmith](https://github.com/Ensighten/spritesmith)
+- `retina` - optional, when specified, uses retina capabilities of [spritesheet-templates](https://github.com/twolfson/spritesheet-templates). Can be either suffix string (like '@2x') or object that describes the way retina sources are differentiated from normal sources. If it is an object then it expected to have three fields:
+    - `classifier` - `Function` that allows to say which source is for retina spritesheet and which is not. Will be called with full path to source file, and should return an object of three fields
+        - `type` - determines which kind of source is this. Can contain one of two values: 'retina' and 'normal'
+        - `normalName` - full path to corresponding normal source image
+        - `retinaName` - full path to corresponding retina source image
+    - `targetImage` - full path to generated retina image
+    - `cssImageRef` - path by which generated image will be referenced in API
+
+    When used as suffix string it applies to source files, filename for retina spritesheet image and cssImageRef
+
+    `apiOptions.generateSpriteName` will be applied to `normalName` returned by retina.classifier
+
 - `spritesheetTemplatesOptions` - optional. Options for [spritesheet-templates](https://github.com/twolfson/spritesheet-templates)
-    
+
 `spritesheetTemplatesOptions.format` - usually derived from file extension in `target.css`, but can be specified explicitly
+
 
 ### How it works
 
@@ -129,4 +142,4 @@ The only piece of logic it does by itself is determining which format to use jud
 
 *My English sucks*
 
-*So if anyone bleeding from eyes seeing this readme please do not hesitate with improving it.*
+*So if anyone is bleeding from their eyes reading this, please do not hesitate improving it.*
