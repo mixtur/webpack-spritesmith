@@ -104,7 +104,7 @@ So the way generated image is accessed from generated API at the moment has to b
 
 - `target` - generated files
     - `image` - target image filename
-    - `css` - target spritesheet filename, can be css, stylus, less or sass file
+    - `css` - target spritesheet filename, can be css, stylus, less, sass or json file
 - `apiOptions` - optional
     - `generateSpriteName` - function. Takes full path to source image file and expected to return
     name by which it will be referenced in API. Return value will be used as `sprite.name` for
