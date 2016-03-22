@@ -104,7 +104,20 @@ So the way generated image is accessed from generated API at the moment has to b
 
 - `target` - generated files
     - `image` - target image filename
-    - `css` - target spritesheet filename, can be css, stylus, less, sass or json file
+    - `css` - can be string or array of strings and options for spritesheet-templates
+        - String : target spritesheet filename, can be css, stylus, less, sass or json file
+        - Array : used if you want to specify multiple css targets and/or options for spritesheet-templates. Each element must be either string with path to target file or Array with that string and object with options
+         ```javascript
+         
+            ...
+            css: [
+                path.resolve(__dirname, 'src/spritesmith-generated/sprite.styl'),
+                [path.resolve(__dirname, 'src/spritesmith-generated/sprite.json'), {
+                    format: 'json_texture'
+                }]
+            ]
+         
+         ```
 - `apiOptions` - optional
     - `generateSpriteName` - function. Takes full path to source image file and expected to return
     name by which it will be referenced in API. Return value will be used as `sprite.name` for
@@ -129,10 +142,6 @@ So the way generated image is accessed from generated API at the moment has to b
 
     `apiOptions.generateSpriteName` will be applied to `normalName` returned by retina.classifier
 
-- `spritesheetTemplatesOptions` - optional. Options for [spritesheet-templates](https://github.com/twolfson/spritesheet-templates)
-
-`spritesheetTemplatesOptions.format` - usually derived from file extension in `target.css`, but can be specified explicitly
-
 
 ### How it works
 
@@ -142,9 +151,33 @@ These files are expected to be used as source files in your project.
 
 Basically plugin simply wires together [webpack](http://webpack.github.io/), [spritesmith](https://github.com/Ensighten/spritesmith)
 and [spritesheet-templates](https://github.com/twolfson/spritesheet-templates).
-The only piece of logic it does by itself is determining which format to use judging by file extension in `config.target.css`.
+The only piece of logic it does by itself is determining which format to use judging by file extensions in `config.target.css`.
 
+### Breaking changes in 0.2.0
+There is no spritesheetTemplatesOptions anymore, since there can be multiple target.css, it moved there.
+```javascript
 
-*My English sucks*
+//was
+{
+  target: {
+    ...
+    css: path.resolve(__dirname, 'src/spritesmith-generated/sprite.json'),
+  },
+  spritesheetTemplatesOptions: {format: 'json_texture'}
+}
+//now
+{
+  target: {
+    ...
+    css: [
+      [path.resolve(__dirname, 'src/spritesmith-generated/sprite.json'), {
+        format: 'json_texture'
+      }],
+      [path.resolve(__dirname, 'src/spritesmith-generated/sprite-2.json'), {
+        format: 'json_array'
+      }]
+    ]
+  }
+}
 
-*So if anyone is bleeding from their eyes reading this, please do not hesitate improving it.*
+```
