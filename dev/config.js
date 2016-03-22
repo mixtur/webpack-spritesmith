@@ -35,7 +35,10 @@ module.exports = {
             },
             target: {
                 image: path.resolve(__dirname, 'src/generated/sprite.png'),
-                css: path.resolve(__dirname, 'src/generated/sprite.styl')
+                css: [
+                    path.resolve(__dirname, 'src/generated/sprite.styl'),
+                    path.resolve(__dirname, 'src/generated/sprite.json')
+                ]
             },
             apiOptions: {
                 generateSpriteName: function (fileName) {
