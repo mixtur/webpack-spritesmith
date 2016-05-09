@@ -104,20 +104,23 @@ So the way generated image is accessed from generated API at the moment has to b
 
 - `target` - generated files
     - `image` - target image filename
-    - `css` - can be string or array of strings and options for spritesheet-templates
-        - String : target spritesheet filename, can be css, stylus, less, sass or json file
-        - Array : used if you want to specify multiple css targets and/or options for spritesheet-templates. Each element must be either string with path to target file or Array with that string and object with options
-         ```javascript
-         
-            ...
-            css: [
-                path.resolve(__dirname, 'src/spritesmith-generated/sprite.styl'),
-                [path.resolve(__dirname, 'src/spritesmith-generated/sprite.json'), {
-                    format: 'json_texture'
-                }]
-            ]
-         
-         ```
+    - `css` - can be one of the following
+        - `"full/path/to/spritesheet/api"` - for example `path.resolve(__dirname, 'src/spritesmith-generated/sprite.styl')`
+        - `["full/path/to/spritesheet/api1", "full/path/to/spritesheet/api2"]`,
+        - `["full/path/to/spritesheet/api1", ["full/path/to/spritesheet/api2", spritesmithTemplatesOptions]]`
+            spritesmithTemplatesOptions - is the second argument [here](https://github.com/twolfson/spritesheet-templates#templaterdata-options)
+
+            for example
+
+            ```javascript
+                ...
+                css: [
+                    path.resolve(__dirname, 'src/spritesmith-generated/sprite.styl'),
+                    [path.resolve(__dirname, 'src/spritesmith-generated/sprite.json'), {
+                        format: 'json_texture'
+                    }]
+                ]
+            ```
 - `apiOptions` - optional
     - `generateSpriteName` - function. Takes full path to source image file and expected to return
     name by which it will be referenced in API. Return value will be used as `sprite.name` for
@@ -146,6 +149,10 @@ So the way generated image is accessed from generated API at the moment has to b
 
 There are no *intended* support for custom templates.
 Though spritesheet-templates (that currently does all template magic) [already can give you that](https://github.com/twolfson/spritesheet-templates#custom).
+
+The idea is you can use `templater.addTemplate` or `templater.addHandlebarsTemplate`.
+
+And then specify that template in "target.css"
 
 For example you can write something like this
 
