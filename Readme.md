@@ -142,6 +142,55 @@ So the way generated image is accessed from generated API at the moment has to b
 
     `apiOptions.generateSpriteName` will be applied to `normalName` returned by retina.classifier
 
+### Custom Templates
+
+There are no *intended* support for custom templates.
+Though spritesheet-templates (that currently does all template magic) [already can give you that](https://github.com/twolfson/spritesheet-templates#custom).
+
+For example you can write something like this
+
+```javascript
+
+//webpack.config.js
+var templater = require('spritesheet-templates');
+
+//create new format called custom_format
+templater.addTemlate('custom_format', function (data) {
+    const shared = '.ico { background-image: url(I) }'
+        .replace('I', data.sprites[0].image);
+
+    const perSprite = data.sprites.map(function (sprite) {
+        return '.ico-N { width: Wpx; height: Hpx; background-position: Xpx Ypx; }'
+            .replace('N', sprite.name)
+            .replace('W', sprite.width)
+            .replace('H', sprite.height)
+            .replace('X', sprite.offset_x)
+            .replace('N', sprite.offset_y);
+    }).join('\n');
+
+    return shared + '\n' + perSprite;
+});
+
+module.exports = {
+    ...
+    plugins: [
+        new SpritesmithPlugin({
+            css: [
+                [path.resolve(__dirname, 'src/spritesmith-generated/sprite.css'), {
+                    format: 'custom_format'//tell webpack-spritesmith to use that new format
+                }]
+            ]
+        })
+    ]
+}
+
+```
+
+If you'll need to use retina template, then you'll have to name it with '_retina' in the end.
+
+For example above you would have to change `templater.addTemlate('custom_format', ...` to `templater.addTemlate('custom_format_retina', ...`
+
+Though `format: 'custom_format'` should stay the same.
 
 ### How it works
 

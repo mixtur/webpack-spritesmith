@@ -1,6 +1,7 @@
 var path = require('path');
 
 var SpritesmithPlugin = require('../lib/Plugin');
+require('./customTemplate');
 
 module.exports = {
     entry: path.resolve(__dirname, 'src/entry.js'),
@@ -37,7 +38,11 @@ module.exports = {
                 image: path.resolve(__dirname, 'src/generated/sprite.png'),
                 css: [
                     path.resolve(__dirname, 'src/generated/sprite.styl'),
-                    path.resolve(__dirname, 'src/generated/sprite.json')
+                    path.resolve(__dirname, 'src/generated/sprite.json'),
+                    path.resolve(__dirname, 'src/generated/sprite.css'),
+                    [path.resolve(__dirname, 'src/generated/sprite-custom.css'), {
+                        format: 'custom_format',
+                    }]
                 ]
             },
             apiOptions: {
