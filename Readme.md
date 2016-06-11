@@ -162,7 +162,7 @@ For example you can write something like this
 var templater = require('spritesheet-templates');
 
 //create new format called custom_format
-templater.addTemlate('custom_format', function (data) {
+templater.addTemplate('custom_format', function (data) {
     const shared = '.ico { background-image: url(I) }'
         .replace('I', data.sprites[0].image);
 
@@ -172,7 +172,7 @@ templater.addTemlate('custom_format', function (data) {
             .replace('W', sprite.width)
             .replace('H', sprite.height)
             .replace('X', sprite.offset_x)
-            .replace('N', sprite.offset_y);
+            .replace('Y', sprite.offset_y);
     }).join('\n');
 
     return shared + '\n' + perSprite;
