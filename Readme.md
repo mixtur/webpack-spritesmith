@@ -155,10 +155,10 @@ So the way generated image is accessed from generated API at the moment has to b
 
     //webpack.config.js
     var templateFunction = function (data) {
-        const shared = '.ico { background-image: url(I) }'
+        var shared = '.ico { background-image: url(I) }'
             .replace('I', data.sprites[0].image);
 
-        const perSprite = data.sprites.map(function (sprite) {
+        var perSprite = data.sprites.map(function (sprite) {
             return '.ico-N { width: Wpx; height: Hpx; background-position: Xpx Ypx; }'
                 .replace('N', sprite.name)
                 .replace('W', sprite.width)
