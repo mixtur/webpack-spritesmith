@@ -208,32 +208,3 @@ These files are expected to be used as source files in your project.
 Basically plugin simply wires together [webpack](http://webpack.github.io/), [spritesmith](https://github.com/Ensighten/spritesmith)
 and [spritesheet-templates](https://github.com/twolfson/spritesheet-templates).
 The only piece of logic it does by itself is determining which format to use judging by file extensions in `config.target.css`.
-
-### Breaking changes in 0.2.0
-There is no spritesheetTemplatesOptions anymore, since there can be multiple target.css, it moved there.
-```javascript
-
-//was
-{
-  target: {
-    ...
-    css: path.resolve(__dirname, 'src/spritesmith-generated/sprite.json'),
-  },
-  spritesheetTemplatesOptions: {format: 'json_texture'}
-}
-//now
-{
-  target: {
-    ...
-    css: [
-      [path.resolve(__dirname, 'src/spritesmith-generated/sprite.json'), {
-        format: 'json_texture'
-      }],
-      [path.resolve(__dirname, 'src/spritesmith-generated/sprite-2.json'), {
-        format: 'json_array'
-      }]
-    ]
-  }
-}
-
-```
