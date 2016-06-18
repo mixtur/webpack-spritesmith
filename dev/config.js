@@ -1,7 +1,7 @@
 var path = require('path');
 
 var SpritesmithPlugin = require('../lib/Plugin');
-require('./customTemplate');
+const myTemplates = require('./customTemplate');
 
 module.exports = {
     entry: path.resolve(__dirname, 'src/entry.js'),
@@ -41,7 +41,7 @@ module.exports = {
                     path.resolve(__dirname, 'src/generated/sprite.json'),
                     path.resolve(__dirname, 'src/generated/sprite.css'),
                     [path.resolve(__dirname, 'src/generated/sprite-custom.css'), {
-                        format: 'custom_format',
+                        format: 'custom_format'
                     }]
                 ]
             },
@@ -57,6 +57,10 @@ module.exports = {
             retina: '@2x',
             spritesmithOptions: {
                 padding: 10
+            },
+            customTemplates: {
+                'custom_format': myTemplates.customFormat,
+                'custom_format_retina': myTemplates.customFormatRetina
             }
         })
     ]

@@ -1,6 +1,4 @@
-var templater = require('spritesheet-templates');
-
-templater.addTemplate('custom_format', data => {
+exports.customFormat = data => {
     var spritesheetImageUrl = data.sprites[0].image;
 
     var sharedSelector = data.sprites
@@ -24,9 +22,9 @@ templater.addTemplate('custom_format', data => {
         .join('');
 
     return shared + '\n' + perImage;
-});
+};
 
-templater.addTemplate('custom_format_retina', data => {
+exports.customFormatRetina = data => {
     var spritesheetImageUrl = data.sprites[0].image;
 
     var sharedSelector = data.sprites
@@ -57,7 +55,7 @@ templater.addTemplate('custom_format_retina', data => {
                 }
             }
         `) + '\n' + perImage;
-});
+};
 
 function dli(s) {//drop last indentation
     const lines = s.split('\n').filter(s => s.trim().length);

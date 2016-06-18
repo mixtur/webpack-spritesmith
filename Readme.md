@@ -100,7 +100,7 @@ So the way generated image is accessed from generated API at the moment has to b
     - `glob` well... it is a glob
 
     `cwd` and `glob` both will be passed directly to [glob](https://github.com/isaacs/node-glob) (and [gaze](https://github.com/shama/gaze)
-    in watch mode), then results will be used as list of source images
+    in watch mode), then resulting list of files will be used as list of source images
 
 - `target` - generated files
     - `image` - target image filename
@@ -144,67 +144,54 @@ So the way generated image is accessed from generated API at the moment has to b
     When used as suffix string it applies to source files, filename for retina spritesheet image and cssImageRef
 
     `apiOptions.generateSpriteName` will be applied to `normalName` returned by retina.classifier
+- `customTemplates` - optional. Object with keys and values corresponding to format names and template descriptions respectively.
+    Template description can be either a `path/to/handlebars/template/file` or template function
 
-### Custom Templates
+    You can use templates registered here as `format` in "target.css"
 
-There are no *intended* support for custom templates.
-Though spritesheet-templates (that currently does all template magic) [already can give you that](https://github.com/twolfson/spritesheet-templates#custom).
+    For example you can write something like this
 
-The idea is you can use `templater.addTemplate` or `templater.addHandlebarsTemplate`.
+    ```javascript
 
-And then specify that template in "target.css"
+    //webpack.config.js
+    var templateFunction = function (data) {
+        const shared = '.ico { background-image: url(I) }'
+            .replace('I', data.sprites[0].image);
 
-For example you can write something like this
+        const perSprite = data.sprites.map(function (sprite) {
+            return '.ico-N { width: Wpx; height: Hpx; background-position: Xpx Ypx; }'
+                .replace('N', sprite.name)
+                .replace('W', sprite.width)
+                .replace('H', sprite.height)
+                .replace('X', sprite.offset_x)
+                .replace('Y', sprite.offset_y);
+        }).join('\n');
 
-```javascript
+        return shared + '\n' + perSprite;
+    });
 
-//webpack.config.js
-var templater = require('spritesheet-templates');
+    module.exports = {
+        ...
+        plugins: [
+            new SpritesmithPlugin({
+                target: {
+                    ...
+                    css: [
+                        [path.resolve(__dirname, 'src/spritesmith-generated/sprite-1.css'), {
+                            format: 'function_based_template'
+                        }],
+                        [path.resolve(__dirname, 'src/spritesmith-generated/sprite-2.css'), {
+                            format: 'handlebars_based_template'
+                        }]
+                    ]
+                },
+                customTemplates: {
+                    'function_based_template': templateFunction,
+                    'handlebars_based_template': path.resolve(__dirname, '../my_handlebars_template.handlebars')
+                },
+                ...
+            })
+        ]
+    }
 
-//create new format called custom_format
-templater.addTemplate('custom_format', function (data) {
-    const shared = '.ico { background-image: url(I) }'
-        .replace('I', data.sprites[0].image);
-
-    const perSprite = data.sprites.map(function (sprite) {
-        return '.ico-N { width: Wpx; height: Hpx; background-position: Xpx Ypx; }'
-            .replace('N', sprite.name)
-            .replace('W', sprite.width)
-            .replace('H', sprite.height)
-            .replace('X', sprite.offset_x)
-            .replace('Y', sprite.offset_y);
-    }).join('\n');
-
-    return shared + '\n' + perSprite;
-});
-
-module.exports = {
-    ...
-    plugins: [
-        new SpritesmithPlugin({
-            css: [
-                [path.resolve(__dirname, 'src/spritesmith-generated/sprite.css'), {
-                    format: 'custom_format'//tell webpack-spritesmith to use that new format
-                }]
-            ]
-        })
-    ]
-}
-
-```
-
-If you'll need to use retina template, then you'll have to name it with '_retina' in the end.
-
-For example above you would have to change `templater.addTemlate('custom_format', ...` to `templater.addTemlate('custom_format_retina', ...`
-
-Though `format: 'custom_format'` should stay the same.
-
-### How it works
-
-Plugin eats list of images in form of glob (`config.src.cwd`, `config.src.glob`), and spits out two files: spritesheet
-(`config.target.image`) and some API (`config.target.css`) in format that [spritesheet-templates](https://github.com/twolfson/spritesheet-templates) can produce.
-These files are expected to be used as source files in your project.
-
-Basically plugin simply wires together [webpack](http://webpack.github.io/), [spritesmith](https://github.com/Ensighten/spritesmith)
-and [spritesheet-templates](https://github.com/twolfson/spritesheet-templates).
-The only piece of logic it does by itself is determining which format to use judging by file extensions in `config.target.css`.
+    ```
