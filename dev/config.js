@@ -35,7 +35,7 @@ module.exports = {
                 glob: '**/ico/*.png'
             },
             target: {
-                image: path.resolve(__dirname, 'src/generated/sprite.png'),
+                image: path.resolve(__dirname, 'src/generated/sprite.[hash].png'),
                 css: [
                     path.resolve(__dirname, 'src/generated/sprite.styl'),
                     path.resolve(__dirname, 'src/generated/sprite.json'),
@@ -52,7 +52,7 @@ module.exports = {
                     var moduleName = dir[dir.length - 2];
                     return moduleName + '__' + parsed.name;
                 },
-                cssImageRef: '~sprite.png'
+                cssImageRef: '~sprite.[hash].png'
             },
             retina: '@2x',
             spritesmithOptions: {
