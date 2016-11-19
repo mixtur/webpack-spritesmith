@@ -35,7 +35,7 @@ module.exports = {
                 glob: '**/ico/*.png'
             },
             target: {
-                image: path.resolve(__dirname, 'src/generated/sprite.[hash].png'),
+                image: path.resolve(__dirname, 'src/generated/sprite.[hash:6].png'),
                 css: [
                     path.resolve(__dirname, 'src/generated/sprite.styl'),
                     path.resolve(__dirname, 'src/generated/sprite.json'),
