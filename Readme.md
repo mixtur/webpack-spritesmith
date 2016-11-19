@@ -126,7 +126,7 @@ So the way generated image is accessed from generated API at the moment has to b
     name by which it will be referenced in API. Return value will be used as `sprite.name` for
     [spritesheet-templates](https://github.com/twolfson/spritesheet-templates). Default behaviour is to
     use filename (without dirname and extension)
-    - `cssImageRef` - path by which generated image will be referenced in API 
+    - `cssImageRef` - path by which generated image will be referenced in API. If target.image is interpolated, cssImageRef should be interpolated the same way too. 
 - `spritesmithOptions` - optional. Options for [spritesmith](https://github.com/Ensighten/spritesmith)
 - `retina` - optional, when specified, uses retina capabilities of [spritesheet-templates](https://github.com/twolfson/spritesheet-templates). Can be either suffix string (like '@2x') or object consisting of three fields:
     - `classifier` - `Function` that allows to say which source is for retina spritesheet and which is not. Will be called with full path to source file, and should return an object of this format -
