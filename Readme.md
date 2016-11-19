@@ -103,7 +103,7 @@ So the way generated image is accessed from generated API at the moment has to b
     in watch mode), then resulting list of files will be used as list of source images
 
 - `target` - generated files
-    - `image` - target image filename
+    - `image` - target image filename. Can be interpolated with [loader-utils](https://github.com/webpack/loader-utils#interpolatename). Though I would recommend to use file-loader for interpolation. 
     - `css` - can be one of the following
         - `"full/path/to/spritesheet/api"` - for example `path.resolve(__dirname, 'src/spritesmith-generated/sprite.styl')`
         - `["full/path/to/spritesheet/api1", "full/path/to/spritesheet/api2"]`,
