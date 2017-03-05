@@ -6,7 +6,7 @@ exports.customFormat = data => {
         .join(', ');
 
     var shared = dli(`
-        ${sharedSelector}: {
+        ${sharedSelector} {
             background: url(${spritesheetImageUrl})
         }
     `);
@@ -32,7 +32,7 @@ exports.customFormatRetina = data => {
         .join(', ');
 
     var shared = dli(`
-        ${sharedSelector}: {
+        ${sharedSelector} {
             background-image: url(${spritesheetImageUrl});
         }
     `);

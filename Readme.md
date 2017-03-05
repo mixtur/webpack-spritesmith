@@ -37,17 +37,20 @@ module.exports = {
     module: {
         loaders: [
             {test: /\.styl$/, loaders: [
-                'style',
-                'css',
-                'stylus'
+                'style-loader',
+                'css-loader',
+                'stylus-loader'
             ]},
             {test: /\.png$/, loaders: [
-                'file?name=i/[hash].[ext]'
+                'file-loader?name=i/[hash].[ext]'
             ]}
         ]
     },
     resolve: {
-        modulesDirectories: ["web_modules", "node_modules", "spritesmith-generated"]
+        //webpack 1:
+        modulesDirectories: ["node_modules", "spritesmith-generated"],
+        //webpack 2:
+        modules: ["node_modules", "spritesmith-generated"]
     },
     plugins: [
         new SpritesmithPlugin({

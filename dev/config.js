@@ -14,18 +14,18 @@ module.exports = {
     module: {
         loaders: [
             {test: /\.styl$/, loaders: [
-                'style',
-                'css',
-                'stylus'
+                'style-loader',
+                'css-loader',
+                'stylus-loader'
             ]},
             {test: /\.png$/, loaders: [
-                'file?name=i/[hash].[ext]'
+                'file-loader?name=i/[hash].[ext]'
             ]}
         ]
     },
 
     resolve: {
-        modulesDirectories: ["web_modules", "node_modules", "generated"]
+        modules: ["web_modules", "node_modules", "generated"]
     },
 
     plugins: [
