@@ -1,4 +1,7 @@
-### 0.3.2
+### 0.3.3
+- fix [#28](https://github.com/mixtur/webpack-spritesmith/issues/28)
+
+### 0.3.2 (broken, unpublished from npm)
 - updated dependencies
 - add description to package.json
 
