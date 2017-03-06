@@ -54,7 +54,7 @@ module.exports = {
                 },
                 cssImageRef: '~sprite.[hash].png'
             },
-            retina: '@2x',
+            //retina: '@2x',
             spritesmithOptions: {
                 padding: 10
             },
