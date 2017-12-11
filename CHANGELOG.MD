@@ -1,6 +1,6 @@
 ### 0.3.5
 - fix [#45](https://github.com/mixtur/webpack-spritesmith/issues/45) 
-### 0.3.4 (not publihed)
+### 0.3.4 (not published)
 - fix [#44](https://github.com/mixtur/webpack-spritesmith/issues/44)
 ### 0.3.3
 - fix [#28](https://github.com/mixtur/webpack-spritesmith/issues/28)
