@@ -52,7 +52,7 @@ module.exports = {
                     var moduleName = dir[dir.length - 2];
                     return moduleName + '__' + parsed.name;
                 },
-                cssImageRef: '~sprite.[hash].png'
+                cssImageRef: '~sprite.[hash:6].png'
             },
             //retina: '@2x',
             spritesmithOptions: {
