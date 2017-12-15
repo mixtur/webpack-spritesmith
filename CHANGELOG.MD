@@ -1,4 +1,6 @@
-### 0.3.5
+### 0.3.6
+- fix (via [#48](https://github.com/mixtur/webpack-spritesmith/pull/48)) cleanup only works for one instance of plugin. Which is breaking some configurations.
+### 0.3.5 (broken, marked as deprecated in npm)
 - fix [#45](https://github.com/mixtur/webpack-spritesmith/issues/45) 
 ### 0.3.4 (not published)
 - fix [#44](https://github.com/mixtur/webpack-spritesmith/issues/44)
