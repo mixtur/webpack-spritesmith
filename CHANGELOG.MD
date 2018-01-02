@@ -1,3 +1,5 @@
+### 0.4.0
+- add handlebarsHelpers (via [#48](https://github.com/mixtur/webpack-spritesmith/pull/49))
 ### 0.3.6
 - fix (via [#48](https://github.com/mixtur/webpack-spritesmith/pull/48)) cleanup only works for one instance of plugin. Which is breaking some configurations.
 ### 0.3.5 (broken, marked as deprecated in npm)
