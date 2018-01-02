@@ -133,6 +133,7 @@ So the way generated image is accessed from generated API at the moment has to b
     - `handlebarsHelpers` - object. Container for helpers to register to handlebars for our template
         - Each key-value pair is the name of a handlebars helper corresponding to its function
         - For example, `{half: function (num) { return num/2; }` will add a handlebars helper that halves numbers
+        - Note that handlebarsHelpers is global. If you have multiple instances of SpritesmithPlugin, helpers defined later will override helpers defined earlier.
 - `spritesmithOptions` - optional. Options for [spritesmith](https://github.com/Ensighten/spritesmith)
 - `retina` - optional, when specified, uses retina capabilities of [spritesheet-templates](https://github.com/twolfson/spritesheet-templates). Can be either suffix string (like '@2x') or object consisting of three fields:
     - `classifier` - `Function` that allows to say which source is for retina spritesheet and which is not. Will be called with full path to source file, and should return an object of this format -
