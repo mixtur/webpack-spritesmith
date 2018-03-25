@@ -4,7 +4,8 @@
   "description": "Webpack plugin that converts set of images into a spritesheet and SASS/LESS/Stylus mixins",
   "main": "lib/Plugin.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "webpack --config dev/config.js",
+    "dev-watch": "webpack --config dev/config.js --watch"
   },
   "repository": {
     "type": "git",
@@ -25,19 +26,20 @@
   "dependencies": {
     "async": "^2.1.5",
     "gaze": "^1.1.2",
-    "glob": "^7.1.1",
-    "loader-utils": "^1.0.2",
-    "lodash": "^4.17.4",
+    "glob": "^7.1.2",
+    "loader-utils": "^1.1.0",
+    "lodash": "^4.17.5",
     "mkdirp": "^0.5.1",
-    "spritesheet-templates": "^10.2.1",
-    "spritesmith": "^3.1.0"
+    "spritesheet-templates": "^10.2.2",
+    "spritesmith": "^3.3.0"
   },
   "devDependencies": {
-    "css-loader": "^0.22.0",
-    "file-loader": "^0.8.4",
-    "style-loader": "^0.13.0",
+    "css-loader": "^0.28.11",
+    "file-loader": "^1.1.11",
+    "style-loader": "^0.20.3",
     "stylus": "^0.54.5",
-    "stylus-loader": "^2.5.0",
-    "webpack": "^2.2.1"
+    "stylus-loader": "^3.0.2",
+    "webpack": "^4.2.0",
+    "webpack-cli": "^2.0.13"
   }
 }

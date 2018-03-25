@@ -11,8 +11,10 @@ module.exports = {
         filename: 'bundle.js'
     },
 
+    mode: "development",
+
     module: {
-        loaders: [
+        rules: [
             {test: /\.styl$/, loaders: [
                 'style-loader',
                 'css-loader',

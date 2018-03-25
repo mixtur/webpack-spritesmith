@@ -49,7 +49,7 @@ module.exports = {
     resolve: {
         //webpack 1:
         modulesDirectories: ["node_modules", "spritesmith-generated"],
-        //webpack 2:
+        //webpack 2+:
         modules: ["node_modules", "spritesmith-generated"]
     },
     plugins: [
