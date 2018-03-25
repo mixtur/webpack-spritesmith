@@ -1,3 +1,5 @@
+### 0.4.1
+- fix [#61](https://github.com/mixtur/webpack-spritesmith/issues/61)
 ### 0.4.0
 - add handlebarsHelpers (via [#48](https://github.com/mixtur/webpack-spritesmith/pull/49))
 ### 0.3.6
