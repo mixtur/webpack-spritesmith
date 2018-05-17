@@ -35,21 +35,18 @@ var SpritesmithPlugin = require('webpack-spritesmith');
 module.exports = {
     // ...
     module: {
-        loaders: [
-            {test: /\.styl$/, loaders: [
+        rules: [
+            {test: /\.styl$/, use: [
                 'style-loader',
                 'css-loader',
                 'stylus-loader'
             ]},
-            {test: /\.png$/, loaders: [
+            {test: /\.png$/, use: [
                 'file-loader?name=i/[hash].[ext]'
             ]}
         ]
     },
     resolve: {
-        //webpack 1:
-        modulesDirectories: ["node_modules", "spritesmith-generated"],
-        //webpack 2+:
         modules: ["node_modules", "spritesmith-generated"]
     },
     plugins: [
