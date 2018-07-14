@@ -4,9 +4,10 @@
   "description": "Webpack plugin that converts set of images into a spritesheet and SASS/LESS/Stylus mixins",
   "main": "lib/Plugin.js",
   "scripts": {
-    "prepack": "gulp build",
-    "dev": "gulp build && rimraf dev/src/generated && webpack --config dev/config.js",
-    "dev-watch": "gulp build && webpack --config dev/config.js --watch"
+    "build": "rimraf lib && gulp build",
+    "prepack": "npm build",
+    "dev": "npm build && rimraf dev/src/generated && webpack --config dev/config.js",
+    "dev-watch": "npm build && webpack --config dev/config.js --watch"
   },
   "repository": {
     "type": "git",
