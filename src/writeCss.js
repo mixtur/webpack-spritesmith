@@ -1,7 +1,5 @@
-const async = require('async');
-const writeFileR = require('./writeFileR');
 const spritesheetTemplater = require('spritesheet-templates');
-const sendToPast = require('./sendToPast');
+const {sendToPast, writeFileR} = require('./utils');
 
 module.exports = async (sources, templaterData, shouldSendToPast) => {
     return await Promise.all(sources.map(async css => {

@@ -4,48 +4,50 @@ const _ = require('lodash');
 
 const substitute = require('./substitute');
 const writeCss = require('./writeCss');
-const writeFileR = require('./writeFileR');
-const sendToPast = require('./sendToPast');
-const promiseCall = require('./promiseCall');
+const {sendToPast, promiseCall, writeFileR} = require('./utils');
 
 module.exports = async (options, metaOutput, isInitial, srcFiles) => {
-    const classifiedSources = srcFiles.map(fileName =>
-        options.retina.classifier(path.resolve(options.src.cwd, fileName))
-    );
-
-    const grouppedSources = {};
-    classifiedSources.forEach(source => {
-        const name = options.apiOptions.generateSpriteName(source.normalName);
-        if (!(name in grouppedSources)) {
-            grouppedSources[name] = {
-                apiName: name,
-                normalName: source.normalName,
-                retinaName: source.retinaName
-            };
-        }
-        grouppedSources[name][source.type] = true;
+    const sourceRecords = srcFiles.map(fileName => {
+        const oneRecord = options.retina.classifier(path.resolve(options.src.cwd, fileName));
+        return {
+            ...oneRecord,
+            apiName: options.apiOptions.generateSpriteName(oneRecord.normalName)
+        };
     });
 
-    collectErrors();
+    const combinedSources = _.map(
+        _.groupBy(sourceRecords, 'apiName'),
+        (group) => {
+            const result = _.clone(group[0]);
+            group.forEach(oneRecord => {
+                result[oneRecord.type] = true;
+            });
+            return result;
+        }
+    );
 
-    if (metaOutput.errors.length !== 0) {
+    const errors = checkMissingImages();
+    if (errors.length !== 0) {
+        metaOutput.push(...errors);
         return null;
     }
 
-    const groupByNormalName = _.keyBy(grouppedSources, 'normalName');
-    const groupByRetinaName = _.keyBy(grouppedSources, 'retinaName');
-
-    const normalSpritesmithConfig = getSpritesmithConfig('normalName');
-    const retinaSpritesmithConfig = getSpritesmithConfig('retinaName');
-    retinaSpritesmithConfig.padding = (normalSpritesmithConfig.padding || 0) * 2;
-
     const results = await Promise.all([
-        promiseCall(Spritesmith.run.bind(Spritesmith), normalSpritesmithConfig),
-        promiseCall(Spritesmith.run.bind(Spritesmith), retinaSpritesmithConfig)
+        promiseCall(Spritesmith.run.bind(Spritesmith), {
+            ...options.spritesmithOptions,
+            src: _.map(combinedSources, 'normalName')
+        }),
+        promiseCall(Spritesmith.run.bind(Spritesmith), {
+            ...options.spritesmithOptions,
+            src: _.map(combinedSources, 'retinaName'),
+            padding: (options.padding || 0) * 2
+        })
     ]);
 
-    addCoordinates(groupByNormalName, 'normalCoordinates', results[0].coordinates);
-    addCoordinates(groupByRetinaName, 'retinaCoordinates', results[1].coordinates);
+    combinedSources.forEach(oneSource => {
+        oneSource.normalCoordinates = results[0].coordinates[oneSource.normalName];
+        oneSource.retinaCoordinates = results[1].coordinates[oneSource.retinaName];
+    });
 
     const normalSprites = getSpritesForSpritesheetTemplates('', 'normalCoordinates');
     const retinaSprites = getSpritesForSpritesheetTemplates('retina_', 'retinaCoordinates');
@@ -63,7 +65,7 @@ module.exports = async (options, metaOutput, isInitial, srcFiles) => {
             height: results[1].properties.height,
             image: substitute(options.retina.cssImageRef, results[1])
         },
-        retina_groups: _.values(grouppedSources).map((sprite, i) => ({
+        retina_groups: combinedSources.map((sprite, i) => ({
             name: sprite.apiName,
             index: i
         }))
@@ -71,7 +73,6 @@ module.exports = async (options, metaOutput, isInitial, srcFiles) => {
 
     const normalImageName = substitute(options.target.image, results[0]);
     const retinaImageName = substitute(options.retina.targetImage, results[1]);
-
 
     const writeImage = async (fileName, buffer, isInitial) => {
         await writeFileR(fileName, buffer, 'binary');
@@ -87,9 +88,8 @@ module.exports = async (options, metaOutput, isInitial, srcFiles) => {
         images: [normalImageName, retinaImageName]
     };
 
-
     function getSpritesForSpritesheetTemplates(prefix, field) {
-        return _.map(grouppedSources, (sprite) => ({
+        return _.map(combinedSources, (sprite) => ({
             name: prefix + sprite.apiName,
             x: sprite[field].x,
             y: sprite[field].y,
@@ -98,21 +98,9 @@ module.exports = async (options, metaOutput, isInitial, srcFiles) => {
         }));
     }
 
-    function addCoordinates(groups, coordinatesField, coordinates) {
-        _.forEach(coordinates, (coordinates, name) => {
-            groups[name][coordinatesField] = coordinates;
-        });
-    }
-
-    function getSpritesmithConfig(field) {
-        return _.merge({}, options.spritesmithOptions, {
-            src: _.map(grouppedSources, field)
-        });
-    }
-
-    function collectErrors() {
-        const errors = metaOutput.errors = [];
-        _.forEach(grouppedSources, (group, name) => {
+    function checkMissingImages() {
+        const errors = [];
+        _.forEach(combinedSources, (group, name) => {
             if (group.retina && !group.normal) {
                 errors.push(new Error(
                     'webpack-spritesmith: no normal source for sprite "' + name +
@@ -126,5 +114,6 @@ module.exports = async (options, metaOutput, isInitial, srcFiles) => {
                 ));
             }
         });
+        return errors;
     }
 };

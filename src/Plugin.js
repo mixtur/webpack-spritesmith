@@ -1,7 +1,7 @@
 const gaze = require('gaze');
 const glob = require('glob');
 const fs = require('mz/fs');
-const promiseCall = require('./promiseCall');
+const {promiseCall} = require('./utils');
 
 const processOptions = require('./processOptions');
 
