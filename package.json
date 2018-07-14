@@ -5,9 +5,9 @@
   "main": "lib/Plugin.js",
   "scripts": {
     "build": "rimraf lib && gulp build",
-    "prepack": "npm build",
-    "dev": "npm build && rimraf dev/src/generated && webpack --config dev/config.js",
-    "dev-watch": "npm build && webpack --config dev/config.js --watch"
+    "prepack": "npm run build",
+    "dev": "npm run build && rimraf dev/src/generated && webpack --config dev/config.js",
+    "dev-watch": "npm run build && webpack --config dev/config.js --watch"
   },
   "repository": {
     "type": "git",
