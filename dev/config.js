@@ -45,9 +45,14 @@ module.exports = {
                     [path.resolve(__dirname, 'src/generated/sprite-custom.css'), {
                         format: 'custom_format'
                     }],
+/*
                     [path.resolve(__dirname, 'src/generated/sprite-custom-2.css'), {
                         format: 'custom_handlebars'
-                    }]
+                    }],
+*/
+                    [path.resolve(__dirname, 'src/generated/sprite-custom.json'), {
+                        format: 'custom_format_json'
+                    }],
                 ]
             },
             apiOptions: {
@@ -62,14 +67,16 @@ module.exports = {
                     helperExample: (x) => 10 * x
                 }
             },
-            //retina: '@2x',
+            retina: '@2x',
             spritesmithOptions: {
                 padding: 10
             },
             customTemplates: {
                 'custom_format': myTemplates.customFormat,
                 'custom_format_retina': myTemplates.customFormatRetina,
-                'custom_handlebars': path.resolve(__dirname, './custom.handlebars')
+                //'custom_handlebars': path.resolve(__dirname, './custom.handlebars'),
+                'custom_format_json': data => JSON.stringify(data, null, '  '),
+                'custom_format_json_retina': data => JSON.stringify(data, null, '  '),
             }
         })
     ]
