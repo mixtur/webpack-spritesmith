@@ -1,3 +1,6 @@
+### 0.5.0
+- migrate to es6+babel
+- add source_image info for templates [#66](https://github.com/mixtur/webpack-spritesmith/pull/66)
 ### 0.4.1
 - fix [#61](https://github.com/mixtur/webpack-spritesmith/issues/61)
 ### 0.4.0
