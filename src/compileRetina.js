@@ -49,8 +49,8 @@ module.exports = async (options, metaOutput, isInitial, srcFiles) => {
         oneSource.retinaCoordinates = results[1].coordinates[oneSource.retinaName];
     });
 
-    const normalSprites = getSpritesForSpritesheetTemplates('', 'normalCoordinates');
-    const retinaSprites = getSpritesForSpritesheetTemplates('retina_', 'retinaCoordinates');
+    const normalSprites = getSpritesForSpritesheetTemplates('', 'normalCoordinates', 'normalName');
+    const retinaSprites = getSpritesForSpritesheetTemplates('retina_', 'retinaCoordinates', 'retinaName');
 
     const spritesheetTemplatesData = {
         sprites: normalSprites,
@@ -88,9 +88,10 @@ module.exports = async (options, metaOutput, isInitial, srcFiles) => {
         images: [normalImageName, retinaImageName]
     };
 
-    function getSpritesForSpritesheetTemplates(prefix, field) {
+    function getSpritesForSpritesheetTemplates(prefix, field, sourceField) {
         return _.map(combinedSources, (sprite) => ({
             name: prefix + sprite.apiName,
+            source_image: sprite[sourceField],
             x: sprite[field].x,
             y: sprite[field].y,
             width: sprite[field].width,

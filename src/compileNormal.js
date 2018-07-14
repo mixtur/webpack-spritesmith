@@ -30,6 +30,7 @@ module.exports = async (options, metaOutput, isInitial, srcFiles) => {
             (oneSourceInfo, fileName) => ({
                 ...oneSourceInfo,
                 name: generateSpriteName(fileName),
+                source_image: fileName
             })
         );
 
