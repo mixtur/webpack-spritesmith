@@ -28,7 +28,7 @@ module.exports = async (options, metaOutput, isInitial, srcFiles) => {
 
     const errors = checkMissingImages();
     if (errors.length !== 0) {
-        metaOutput.push(...errors);
+        metaOutput.errors.push(...errors);
         return null;
     }
 
@@ -101,16 +101,16 @@ module.exports = async (options, metaOutput, isInitial, srcFiles) => {
 
     function checkMissingImages() {
         const errors = [];
-        _.forEach(combinedSources, (group, name) => {
+        _.forEach(combinedSources, (group) => {
             if (group.retina && !group.normal) {
                 errors.push(new Error(
-                    'webpack-spritesmith: no normal source for sprite "' + name +
+                    'webpack-spritesmith: no normal source for sprite "' + group.apiName +
                     '" expected file name is ' + group.normalName
                 ));
             }
             if (!group.retina && group.normal) {
                 errors.push(new Error(
-                    'webpack-spritesmith: no retina source for sprite "' + name +
+                    'webpack-spritesmith: no retina source for sprite "' + group.apiName +
                     '" expected file name is ' + group.retinaName
                 ));
             }

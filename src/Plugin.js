@@ -98,6 +98,7 @@ module.exports = class SpritesmithPlugin {
         this._compile().then(
             compileCallback,
             (err) => {
+                console.log(err);
                 this.metaOutput.errors.push(err);
                 compileCallback();
             }
