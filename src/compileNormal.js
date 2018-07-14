@@ -7,7 +7,7 @@ const writeCss = require('./writeCss');
 const {sendToPast, promiseCall, writeFileR} = require('./utils');
 
 module.exports = async (options, metaOutput, isInitial, srcFiles) => {
-    const spritesmithResult = promiseCall(Spritesmith, {
+    const spritesmithResult = await promiseCall(Spritesmith.run.bind(Spritesmith), {
         ...options.spritesmithOptions,
         src: srcFiles.map(fileName => path.resolve(options.src.cwd, fileName))
     });
