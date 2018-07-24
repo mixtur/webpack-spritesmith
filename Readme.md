@@ -4,10 +4,27 @@
 [![GitHub stars](https://img.shields.io/github/stars/mixtur/webpack-spritesmith.svg)](https://github.com/mixtur/webpack-spritesmith/stargazers)
 [![GitHub license](https://img.shields.io/github/license/mixtur/webpack-spritesmith.svg)](https://github.com/mixtur/webpack-spritesmith)
 
+# webpack-spritesmith
+
 Webpack plugin that converts set of images into a spritesheet and SASS/LESS/Stylus mixins, using
 [spritesmith](https://github.com/Ensighten/spritesmith) and [spritesheet-templates](https://github.com/twolfson/spritesheet-templates) 
 
 All ideas are shamelessly taken from [gulp.spritesmith](https://github.com/twolfson/gulp.spritesmith).
+
+
+### Install
+
+Install with npm:
+
+```bash
+npm install --save-dev webpack-spritesmith
+```
+
+Install with yarn:
+
+```bash
+yarn add webpack-spritesmith --dev
+```
 
 ### Example
 
