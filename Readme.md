@@ -203,3 +203,7 @@ So the way generated image is accessed from generated API at the moment has to b
     }
 
     ```
+    
+## License
+
+MIT (see [LICENSE](LICENSE))
