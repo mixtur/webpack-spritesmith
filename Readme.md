@@ -1,4 +1,8 @@
 [![npm](https://img.shields.io/npm/v/webpack-spritesmith.svg)](https://www.npmjs.com/package/webpack-spritesmith)
+[![GitHub issues](https://img.shields.io/github/issues/mixtur/webpack-spritesmith.svg)](https://github.com/mixtur/webpack-spritesmith/issues)
+[![GitHub forks](https://img.shields.io/github/forks/mixtur/webpack-spritesmith.svg)](https://github.com/mixtur/webpack-spritesmith/network)
+[![GitHub stars](https://img.shields.io/github/stars/mixtur/webpack-spritesmith.svg)](https://github.com/mixtur/webpack-spritesmith/stargazers)
+[![GitHub license](https://img.shields.io/github/license/mixtur/webpack-spritesmith.svg)](https://github.com/mixtur/webpack-spritesmith)
 
 Webpack plugin that converts set of images into a spritesheet and SASS/LESS/Stylus mixins, using
 [spritesmith](https://github.com/Ensighten/spritesmith) and [spritesheet-templates](https://github.com/twolfson/spritesheet-templates) 
