@@ -1,6 +1,6 @@
 {
   "name": "webpack-spritesmith",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Webpack plugin that converts set of images into a spritesheet and SASS/LESS/Stylus mixins",
   "main": "lib/Plugin.js",
   "scripts": {

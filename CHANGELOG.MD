@@ -1,3 +1,5 @@
+### 0.5.2
+- fix padding on retina [#69](https://github.com/mixtur/webpack-spritesmith/issues/69)
 ### 0.5.1
 - small fixes
 ### 0.5.0 (unpublished)
