@@ -40,7 +40,7 @@ module.exports = async (options, metaOutput, isInitial, srcFiles) => {
         promiseCall(Spritesmith.run.bind(Spritesmith), {
             ...options.spritesmithOptions,
             src: _.map(combinedSources, 'retinaName'),
-            padding: (options.padding || 0) * 2
+            padding: (options.spritesmithOptions.padding || 0) * 2
         })
     ]);
 
