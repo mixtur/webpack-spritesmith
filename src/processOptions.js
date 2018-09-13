@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const templater = require('spritesheet-templates');
 
-const fThrowExpectField = () => { throw 'Expected field"' + f + '" in options of SpritesmithPlugin'; };
+const fThrowExpectField = (f) => { throw 'Expected field"' + f + '" in options of SpritesmithPlugin'; };
 
 module.exports = (rawOptions) => {
     rawOptions.src || fThrowExpectField('src');
