@@ -1,3 +1,5 @@
+### 0.5.3
+- fix cryptic error message (via [#70](https://github.com/mixtur/webpack-spritesmith/pull/70))
 ### 0.5.2
 - fix padding on retina [#69](https://github.com/mixtur/webpack-spritesmith/issues/69)
 ### 0.5.1
