@@ -172,7 +172,7 @@ So the way generated image is accessed from generated API at the moment has to b
         }).join('\n');
 
         return shared + '\n' + perSprite;
-    });
+    };
 
     module.exports = {
         ...
