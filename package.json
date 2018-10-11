@@ -4,7 +4,7 @@
   "description": "Webpack plugin that converts set of images into a spritesheet and SASS/LESS/Stylus mixins",
   "main": "lib/Plugin.js",
   "scripts": {
-    "build": "rimraf lib && gulp build",
+    "build": "rimraf lib && babel src -d lib",
     "prepack": "npm run build",
     "dev": "npm run build && rimraf dev/src/generated && webpack --config dev/config.js",
     "dev-watch": "npm run build && webpack --config dev/config.js --watch"
@@ -36,18 +36,16 @@
     "spritesmith": "^3.3.1"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-stage-3": "^6.24.1",
+    "@babel/cli": "7.1.2",
+    "@babel/core": "7.1.2",
+    "@babel/preset-env": "7.1.0",
     "css-loader": "^0.28.11",
     "file-loader": "^1.1.11",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^7.0.1",
     "rimraf": "^2.6.2",
     "style-loader": "^0.20.3",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "webpack": "^4.19.1",
-    "webpack-cli": "^2.0.13"
+    "webpack-cli": "2.1.5"
   }
 }
