@@ -1,3 +1,4 @@
+const path = require('path');
 const gaze = require('gaze');
 const glob = require('glob');
 const fs = require('mz/fs');
@@ -28,6 +29,8 @@ module.exports = class SpritesmithPlugin {
     }
 
     apply(compiler) {
+        this.compilerContext = compiler.options.context;
+
         this._hook(compiler, 'run', 'run',
             (compiler, cb) => this.compile(cb)
         );
@@ -77,6 +80,10 @@ module.exports = class SpritesmithPlugin {
 
         if (!compiledFilesPaths) return;
 
+        if (this.options.logCreatedFiles) {
+            this.logCompiledFiles(compiledFilesPaths);
+        }
+
         const jobs = [];
         if (this.prevCompiledFilePaths) {
             this.prevCompiledFilePaths.css.forEach((prevCss) => {
@@ -92,6 +99,25 @@ module.exports = class SpritesmithPlugin {
         }
         this.prevCompiledFilePaths = compiledFilesPaths;
         await Promise.all(jobs);
+    }
+
+    logCompiledFiles(compiledFilesPaths) {
+        console.log('webpack-spritesmith generated files');
+        console.log('images:');
+        console.log(
+            compiledFilesPaths
+                .images
+                .map(x => '  ' + path.relative(this.compilerContext, x))
+                .join('\n')
+        );
+
+        console.log('api:');
+        console.log(
+            compiledFilesPaths
+                .css
+                .map(x => '  ' + path.relative(this.compilerContext, x))
+                .join('\n')
+        );
     }
 
     compile(compileCallback) {

@@ -15,6 +15,7 @@ module.exports = (rawOptions) => {
 
     const mergedOptions = _.merge(
         {
+            logCreatedFiles: false,
             apiOptions: {
                 generateSpriteName: (fileName) =>
                     path.parse(path.relative(mergedOptions.src.cwd, fileName)).name,

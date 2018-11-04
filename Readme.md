@@ -199,3 +199,5 @@ So the way generated image is accessed from generated API at the moment has to b
     }
 
     ```
+
+- `logCreatedFiles` optional. When set to `true` will console.log list of created files.
