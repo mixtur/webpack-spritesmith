@@ -69,7 +69,15 @@ module.exports = class SpritesmithPlugin {
             ? require('./compileRetina')
             : require('./compileNormal');
 
-        const sourceImages = await promiseCall(glob, src.glob, {cwd: src.cwd});
+        const generateSpriteName = this.options.apiOptions.generateSpriteName;
+        const sourceImages = Object.values(
+            (
+                await promiseCall(glob, src.glob, {...src.globOptions, cwd: src.cwd})
+            ).reduce((sourceImageBySpriteName, sourceImage) => {
+                sourceImageBySpriteName[generateSpriteName(sourceImage)] = sourceImage;
+                return sourceImageBySpriteName;
+            }, {})
+        );
 
         const compiledFilesPaths = await compileStrategy(
             this.options,
