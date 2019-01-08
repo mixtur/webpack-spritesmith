@@ -5,7 +5,7 @@
   "main": "lib/Plugin.js",
   "scripts": {
     "build": "rimraf lib && babel src -d lib",
-    "prepack": "npm run build",
+    "prepack": "exit 0 || npm run build",
     "dev": "npm run build && rimraf dev/src/generated && webpack --config dev/config.js",
     "dev-watch": "npm run build && webpack --config dev/config.js --watch"
   },
