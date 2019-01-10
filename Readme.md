@@ -98,7 +98,7 @@ So the way generated image is accessed from generated API at the moment has to b
 - `src` - used to build list of source images
     - `cwd` should be the closest common directory for all source images;
     - `glob` well... it is a glob
-    - `globOptions` options passed to [node-glob](https://github.com/isaacs/node-glob#options)
+    - `options` - optional. These options are passed down through to the packages that handle the globbing of images. (We use [gaze](https://github.com/shama/gaze), which passes them down to [globule](https://github.com/cowboy/node-globule), which also passes them down to [node-glob](https://github.com/isaacs/node-glob#options).)
 
     `cwd` and `glob` both will be passed directly to [glob](https://github.com/isaacs/node-glob) (and [gaze](https://github.com/shama/gaze)
     in watch mode), then resulting list of files will be used as list of source images

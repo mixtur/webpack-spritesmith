@@ -16,7 +16,7 @@ module.exports = (rawOptions) => {
     const mergedOptions = _.merge(
         {
             src: {
-                globOptions: {}
+                options: {}
             },
             logCreatedFiles: false,
             apiOptions: {
