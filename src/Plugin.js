@@ -1,6 +1,5 @@
 const path = require('path');
 const gaze = require('gaze');
-const glob = require('glob');
 const fs = require('mz/fs');
 const {promiseCall} = require('./utils');
 
@@ -28,11 +27,38 @@ module.exports = class SpritesmithPlugin {
         }
     }
 
+    getWatcher(cb) {
+        if (this._watcher) {
+            cb && cb(undefined, this._watcher);
+        } else {
+            this._watcher = gaze(
+                this.options.src.glob,
+                {
+                    ...this.options.src.options,
+                    cwd: this.options.src.cwd
+                },
+                (err, watcher) => {
+                    watcher.on('end', () => {
+                        this._watcher = null;
+                    })
+                    cb && cb(err, watcher);
+                }
+            );
+        }
+        return this._watcher;
+    }
+
     apply(compiler) {
         this.compilerContext = compiler.options.context;
 
         this._hook(compiler, 'run', 'run',
-            (compiler, cb) => this.compile(cb)
+            (compiler, cb) => {
+                this.compile(() => {
+                    // without closing the gaze instance, the build will never finish
+                    this.getWatcher().close();
+                    cb();
+                });
+            }
         );
 
         let watchStarted = false;
@@ -42,16 +68,12 @@ module.exports = class SpritesmithPlugin {
                 return watchRunCallback();
             }
             watchStarted = true;
-            gaze(
-                this.options.src.glob,
-                {cwd: this.options.src.cwd},
-                (err, gaze) => {
-                    err && watchRunCallback(err);
-                    gaze.on('all', () => {
-                        this.compile(() => {});
-                    });
-                }
-            );
+            this.getWatcher((err, watcher) => {
+                err && watchRunCallback(err);
+                watcher.on('all', () => {
+                    this.compile(() => {});
+                });
+            });
 
             return this.compile(watchRunCallback);
         });
@@ -69,7 +91,20 @@ module.exports = class SpritesmithPlugin {
             ? require('./compileRetina')
             : require('./compileNormal');
 
-        const sourceImages = await promiseCall(glob, src.glob, {cwd: src.cwd});
+        const sourceImagesByFolder = this.getWatcher().watched(),
+            allSourceImages = Object.values(sourceImagesByFolder)
+                .reduce((allFiles, files) => [ ...allFiles, ...files ], []),
+            sourceImageBySpriteName = allSourceImages.reduce((sourceImageBySpriteName, sourceImage) => {
+                const spriteName = this.options.apiOptions.generateSpriteName(sourceImage);
+                if (sourceImageBySpriteName[spriteName]) {
+                    if (this.options.logCreatedFiles) {
+                        console.warn(`Sprite name collision for '${spriteName}': discarding ${sourceImageBySpriteName[spriteName]}, using ${sourceImage}`);
+                    }
+                }
+                sourceImageBySpriteName[spriteName] = sourceImage;
+                return sourceImageBySpriteName;
+            }, {}),
+            sourceImages = Object.values(sourceImageBySpriteName);
 
         const compiledFilesPaths = await compileStrategy(
             this.options,
