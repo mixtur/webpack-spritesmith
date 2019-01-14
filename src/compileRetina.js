@@ -103,16 +103,16 @@ module.exports = async (options, metaOutput, isInitial, srcFiles) => {
         const errors = [];
         _.forEach(combinedSources, (group) => {
             if (group.retina && !group.normal) {
-                errors.push(new Error(
-                    'webpack-spritesmith: no normal source for sprite "' + group.apiName +
+                errors.push(
+                    'no normal source for sprite "' + group.apiName +
                     '" expected file name is ' + group.normalName
-                ));
+                );
             }
             if (!group.retina && group.normal) {
-                errors.push(new Error(
-                    'webpack-spritesmith: no retina source for sprite "' + group.apiName +
+                errors.push(
+                    'no retina source for sprite "' + group.apiName +
                     '" expected file name is ' + group.retinaName
-                ));
+                );
             }
         });
         return errors;

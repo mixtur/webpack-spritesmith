@@ -79,8 +79,8 @@ module.exports = class SpritesmithPlugin {
         });
 
         this._hook(compiler, 'emit', 'emit', (compilation, cb) => {
-            compilation.errors = compilation.errors.concat(this.metaOutput.errors);
-            compilation.warnings = compilation.warnings.concat(this.metaOutput.warnings);
+            compilation.errors = compilation.errors.concat(this.metaOutput.errors.map(x => 'webpack-spritesmith: ' + x));
+            compilation.warnings = compilation.warnings.concat(this.metaOutput.warnings.map(x => 'webpack-spritesmith: ' + x));
             cb();
         });
     }
@@ -98,7 +98,9 @@ module.exports = class SpritesmithPlugin {
                 const spriteName = this.options.apiOptions.generateSpriteName(sourceImage);
                 if (sourceImageBySpriteName[spriteName]) {
                     if (this.options.logCreatedFiles) {
-                        console.warn(`Sprite name collision for '${spriteName}': discarding ${sourceImageBySpriteName[spriteName]}, using ${sourceImage}`);
+                        const shortOldFile = path.relative(this.compilerContext, sourceImageBySpriteName[spriteName]);
+                        const shortReplacedFile = path.relative(this.compilerContext, sourceImage);
+                        this.metaOutput.warnings.push(`Sprite name collision for '${spriteName}': discarding '${shortOldFile}', using '${shortReplacedFile}'`);
                     }
                 }
                 sourceImageBySpriteName[spriteName] = sourceImage;
