@@ -1,6 +1,6 @@
 ### 1.0.0
 - exclude inaccessible sprites from generated spritesheets
-- add globOptions (via [#79](https://github.com/mixtur/webpack-spritesmith/pull/79))
+- add src.options (via [#79](https://github.com/mixtur/webpack-spritesmith/pull/79))
 ### 0.5.4
 - add option logCreatedFiles [#77](https://github.com/mixtur/webpack-spritesmith/issues/77)
 ### 0.5.3
