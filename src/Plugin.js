@@ -86,27 +86,11 @@ module.exports = class SpritesmithPlugin {
     }
 
     async _compile() {
-        const src = this.options.src;
-        const compileStrategy = this.useRetinaTemplate
-            ? require('./compileRetina')
-            : require('./compileNormal');
-
-        const sourceImagesByFolder = this.getWatcher().watched(),
-            allSourceImages = Object.values(sourceImagesByFolder)
-                .reduce((allFiles, files) => [ ...allFiles, ...files ], []),
-            sourceImageBySpriteName = allSourceImages.reduce((sourceImageBySpriteName, sourceImage) => {
-                const spriteName = this.options.apiOptions.generateSpriteName(sourceImage);
-                if (sourceImageBySpriteName[spriteName]) {
-                    if (this.options.logCreatedFiles) {
-                        const shortOldFile = path.relative(this.compilerContext, sourceImageBySpriteName[spriteName]);
-                        const shortReplacedFile = path.relative(this.compilerContext, sourceImage);
-                        this.metaOutput.warnings.push(`Sprite name collision for '${spriteName}': discarding '${shortOldFile}', using '${shortReplacedFile}'`);
-                    }
-                }
-                sourceImageBySpriteName[spriteName] = sourceImage;
-                return sourceImageBySpriteName;
-            }, {}),
-            sourceImages = Object.values(sourceImageBySpriteName);
+        const compileStrategy = this.useRetinaTemplate ? require('./compileRetina') : require('./compileNormal');
+        const sourceImagesByFolder = this.getWatcher().watched();
+        const allSourceImages = Object.values(sourceImagesByFolder).reduce(toAllSourceImages, []);
+        const sourceImageBySpriteName = allSourceImages.reduce(toSourceImageBySpriteName.bind(this), {});
+        const sourceImages = Object.values(sourceImageBySpriteName);
 
         const compiledFilesPaths = await compileStrategy(
             this.options,
@@ -134,8 +118,28 @@ module.exports = class SpritesmithPlugin {
                 }
             });
         }
+
         this.prevCompiledFilePaths = compiledFilesPaths;
         await Promise.all(jobs);
+
+        function toAllSourceImages(allFiles, files) {
+            let filteredFiles = files.filter((file) => file[file.length-1] !== '/');
+            return [...allFiles, ...filteredFiles];
+          }
+    
+        function toSourceImageBySpriteName (sourceImageBySpriteName, sourceImage) {
+            const spriteName = this.options.apiOptions.generateSpriteName(sourceImage);
+            if (sourceImageBySpriteName[spriteName]) {
+                if (this.options.logCreatedFiles) {
+                const shortOldFile = path.relative(this.compilerContext, sourceImageBySpriteName[spriteName]);
+                const shortReplacedFile = path.relative(this.compilerContext, sourceImage);
+        
+                this.metaOutput.warnings.push(`Sprite name collision for '${spriteName}': discarding '${shortOldFile}', using '${shortReplacedFile}'`);
+                }
+            }
+            sourceImageBySpriteName[spriteName] = sourceImage;
+            return sourceImageBySpriteName;
+        };
     }
 
     logCompiledFiles(compiledFilesPaths) {
