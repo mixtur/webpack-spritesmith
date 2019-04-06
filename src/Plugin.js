@@ -86,15 +86,16 @@ module.exports = class SpritesmithPlugin {
     }
 
     async _compile() {
-        const src = this.options.src;
         const compileStrategy = this.useRetinaTemplate
             ? require('./compileRetina')
             : require('./compileNormal');
 
-        const sourceImagesByFolder = this.getWatcher().watched(),
-            allSourceImages = Object.values(sourceImagesByFolder)
-                .reduce((allFiles, files) => [ ...allFiles, ...files ], []),
-            sourceImageBySpriteName = allSourceImages.reduce((sourceImageBySpriteName, sourceImage) => {
+        const sourceImagesByFolder = this.getWatcher().watched();
+        const allSourceImages = Object.values(sourceImagesByFolder)
+                .reduce((allFiles, files) => [ ...allFiles, ...files ], [])
+                .filter(x => !x.endsWith(path.sep));
+
+        const sourceImageBySpriteName = allSourceImages.reduce((sourceImageBySpriteName, sourceImage) => {
                 const spriteName = this.options.apiOptions.generateSpriteName(sourceImage);
                 if (sourceImageBySpriteName[spriteName]) {
                     if (this.options.logCreatedFiles) {
