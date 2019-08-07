@@ -4,7 +4,9 @@ var SpritesmithPlugin = require('../lib/Plugin');
 const myTemplates = require('./customTemplate');
 
 module.exports = {
-    entry: path.resolve(__dirname, 'src/entry.js'),
+    context: path.join(__dirname, 'src'),
+
+    entry: './entry.js',
 
     output: {
         path: path.resolve(__dirname, 'build'),
@@ -32,6 +34,7 @@ module.exports = {
 
     plugins: [
         new SpritesmithPlugin({
+            logCreatedFiles: true,
             src: {
                 cwd: path.resolve(__dirname, 'src'),
                 glob: '**/ico/*.png'

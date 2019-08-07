@@ -1,3 +1,15 @@
+### 1.0.1
+- update dependencies (fixes github security whining)
+- fix [#83](https://github.com/mixtur/webpack-spritesmith/issues/83)
+### 1.0.0
+- exclude inaccessible sprites from generated spritesheets
+- add src.options (via [#79](https://github.com/mixtur/webpack-spritesmith/pull/79))
+### 0.5.4
+- add option logCreatedFiles [#77](https://github.com/mixtur/webpack-spritesmith/issues/77)
+### 0.5.3
+- fix cryptic error message (via [#71](https://github.com/mixtur/webpack-spritesmith/pull/71))
+### 0.5.2
+- fix padding on retina [#69](https://github.com/mixtur/webpack-spritesmith/issues/69)
 ### 0.5.1
 - small fixes
 ### 0.5.0 (unpublished)

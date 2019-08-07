@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const templater = require('spritesheet-templates');
 
-const fThrowExpectField = () => { throw 'Expected field"' + f + '" in options of SpritesmithPlugin'; };
+const fThrowExpectField = (f) => { throw `Expected field "${f}" in options of SpritesmithPlugin`; };
 
 module.exports = (rawOptions) => {
     rawOptions.src || fThrowExpectField('src');
@@ -15,6 +15,10 @@ module.exports = (rawOptions) => {
 
     const mergedOptions = _.merge(
         {
+            src: {
+                options: {}
+            },
+            logCreatedFiles: false,
             apiOptions: {
                 generateSpriteName: (fileName) =>
                     path.parse(path.relative(mergedOptions.src.cwd, fileName)).name,

@@ -1,5 +1,5 @@
+const path = require('path');
 const gaze = require('gaze');
-const glob = require('glob');
 const fs = require('mz/fs');
 const {promiseCall} = require('./utils');
 
@@ -27,9 +27,38 @@ module.exports = class SpritesmithPlugin {
         }
     }
 
+    getWatcher(cb) {
+        if (this._watcher) {
+            cb && cb(undefined, this._watcher);
+        } else {
+            this._watcher = gaze(
+                this.options.src.glob,
+                {
+                    ...this.options.src.options,
+                    cwd: this.options.src.cwd
+                },
+                (err, watcher) => {
+                    watcher.on('end', () => {
+                        this._watcher = null;
+                    })
+                    cb && cb(err, watcher);
+                }
+            );
+        }
+        return this._watcher;
+    }
+
     apply(compiler) {
+        this.compilerContext = compiler.options.context;
+
         this._hook(compiler, 'run', 'run',
-            (compiler, cb) => this.compile(cb)
+            (compiler, cb) => {
+                this.compile(() => {
+                    // without closing the gaze instance, the build will never finish
+                    this.getWatcher().close();
+                    cb();
+                });
+            }
         );
 
         let watchStarted = false;
@@ -39,34 +68,46 @@ module.exports = class SpritesmithPlugin {
                 return watchRunCallback();
             }
             watchStarted = true;
-            gaze(
-                this.options.src.glob,
-                {cwd: this.options.src.cwd},
-                (err, gaze) => {
-                    err && watchRunCallback(err);
-                    gaze.on('all', () => {
-                        this.compile(() => {});
-                    });
-                }
-            );
+            this.getWatcher((err, watcher) => {
+                err && watchRunCallback(err);
+                watcher.on('all', () => {
+                    this.compile(() => {});
+                });
+            });
 
             return this.compile(watchRunCallback);
         });
 
         this._hook(compiler, 'emit', 'emit', (compilation, cb) => {
-            compilation.errors = compilation.errors.concat(this.metaOutput.errors);
-            compilation.warnings = compilation.warnings.concat(this.metaOutput.warnings);
+            compilation.errors = compilation.errors.concat(this.metaOutput.errors.map(x => 'webpack-spritesmith: ' + x));
+            compilation.warnings = compilation.warnings.concat(this.metaOutput.warnings.map(x => 'webpack-spritesmith: ' + x));
             cb();
         });
     }
 
     async _compile() {
-        const src = this.options.src;
         const compileStrategy = this.useRetinaTemplate
             ? require('./compileRetina')
             : require('./compileNormal');
 
-        const sourceImages = await promiseCall(glob, src.glob, {cwd: src.cwd});
+        const sourceImagesByFolder = this.getWatcher().watched();
+        const allSourceImages = Object.values(sourceImagesByFolder)
+                .reduce((allFiles, files) => [ ...allFiles, ...files ], [])
+                .filter(x => !x.endsWith(path.sep));
+
+        const sourceImageBySpriteName = allSourceImages.reduce((sourceImageBySpriteName, sourceImage) => {
+                const spriteName = this.options.apiOptions.generateSpriteName(sourceImage);
+                if (sourceImageBySpriteName[spriteName]) {
+                    if (this.options.logCreatedFiles) {
+                        const shortOldFile = path.relative(this.compilerContext, sourceImageBySpriteName[spriteName]);
+                        const shortReplacedFile = path.relative(this.compilerContext, sourceImage);
+                        this.metaOutput.warnings.push(`Sprite name collision for '${spriteName}': discarding '${shortOldFile}', using '${shortReplacedFile}'`);
+                    }
+                }
+                sourceImageBySpriteName[spriteName] = sourceImage;
+                return sourceImageBySpriteName;
+            }, {}),
+            sourceImages = Object.values(sourceImageBySpriteName);
 
         const compiledFilesPaths = await compileStrategy(
             this.options,
@@ -76,6 +117,10 @@ module.exports = class SpritesmithPlugin {
         );
 
         if (!compiledFilesPaths) return;
+
+        if (this.options.logCreatedFiles) {
+            this.logCompiledFiles(compiledFilesPaths);
+        }
 
         const jobs = [];
         if (this.prevCompiledFilePaths) {
@@ -92,6 +137,25 @@ module.exports = class SpritesmithPlugin {
         }
         this.prevCompiledFilePaths = compiledFilesPaths;
         await Promise.all(jobs);
+    }
+
+    logCompiledFiles(compiledFilesPaths) {
+        console.log('webpack-spritesmith generated files');
+        console.log('images:');
+        console.log(
+            compiledFilesPaths
+                .images
+                .map(x => '  ' + path.relative(this.compilerContext, x))
+                .join('\n')
+        );
+
+        console.log('api:');
+        console.log(
+            compiledFilesPaths
+                .css
+                .map(x => '  ' + path.relative(this.compilerContext, x))
+                .join('\n')
+        );
     }
 
     compile(compileCallback) {
