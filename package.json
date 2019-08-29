@@ -31,7 +31,7 @@
     "lodash": "^4.17.15",
     "mkdirp": "^0.5.1",
     "mz": "^2.7.0",
-    "spritesheet-templates": "^10.2.4",
+    "spritesheet-templates": "^10.3.1",
     "spritesmith": "^3.3.1"
   },
   "devDependencies": {
