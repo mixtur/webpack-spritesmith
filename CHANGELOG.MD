@@ -1,5 +1,7 @@
+### 1.0.2
+- update dependencies (fixes github security warning)
 ### 1.0.1
-- update dependencies (fixes github security whining)
+- update dependencies (fixes github security warning)
 - fix [#83](https://github.com/mixtur/webpack-spritesmith/issues/83)
 ### 1.0.0
 - exclude inaccessible sprites from generated spritesheets
