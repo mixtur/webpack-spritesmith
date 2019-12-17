@@ -42,8 +42,8 @@ module.exports = async (options, metaOutput, isInitial, srcFiles) => {
 
         const spritesheet_info = options.apiOptions.spritesheet_info || {
             name:'spritesheet'
-        }
+        };
 
-        return {sprites, spritesheet ,spritesheet_info};
+        return {sprites, spritesheet, spritesheet_info};
     }
 };
