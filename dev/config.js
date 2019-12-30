@@ -1,6 +1,6 @@
-var path = require('path');
+const path = require('path');
 
-var SpritesmithPlugin = require('../lib/Plugin');
+const SpritesmithPlugin = require('../lib/Plugin');
 const myTemplates = require('./customTemplate');
 
 module.exports = {
@@ -45,6 +45,7 @@ module.exports = {
                     path.resolve(__dirname, 'src/generated/sprite.styl'),
                     path.resolve(__dirname, 'src/generated/sprite.json'),
                     path.resolve(__dirname, 'src/generated/sprite.css'),
+                    path.resolve(__dirname, 'src/generated/sprite.sass'),
                     [path.resolve(__dirname, 'src/generated/sprite-custom.css'), {
                         format: 'custom_format'
                     }],
@@ -60,9 +61,9 @@ module.exports = {
             },
             apiOptions: {
                 generateSpriteName: function (fileName) {
-                    var parsed = path.parse(fileName);
-                    var dir = parsed.dir.split(path.sep);
-                    var moduleName = dir[dir.length - 2];
+                    const parsed = path.parse(fileName);
+                    const dir = parsed.dir.split(path.sep);
+                    const moduleName = dir[dir.length - 2];
                     return moduleName + '__' + parsed.name;
                 },
                 cssImageRef: '~sprite.[hash:6].png',
