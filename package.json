@@ -31,8 +31,8 @@
     "lodash": "^4.17.15",
     "mkdirp": "^0.5.1",
     "mz": "^2.7.0",
-    "spritesheet-templates": "^10.3.1",
-    "spritesmith": "^3.3.1"
+    "spritesheet-templates": "^10.4.2",
+    "spritesmith": "^3.4.0"
   },
   "devDependencies": {
     "@babel/cli": "7.1.2",
