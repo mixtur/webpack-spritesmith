@@ -40,9 +40,7 @@ module.exports = async (options, metaOutput, isInitial, srcFiles) => {
             ...spritesmithResult.properties
         };
 
-        const spritesheet_info = options.apiOptions.spritesheet_info || {
-            name:'spritesheet'
-        };
+        const spritesheet_info = options.apiOptions.spritesheet_info;
 
         return {sprites, spritesheet, spritesheet_info};
     }

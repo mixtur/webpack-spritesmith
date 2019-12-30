@@ -53,6 +53,7 @@ module.exports = async (options, metaOutput, isInitial, srcFiles) => {
     const retinaSprites = getSpritesForSpritesheetTemplates('retina_', 'retinaCoordinates', 'retinaName');
 
     const spritesheetTemplatesData = {
+        retina_spritesheet_info: options.apiOptions.retina_spritesheet_info,
         sprites: normalSprites,
         spritesheet: {
             width: results[0].properties.width,
