@@ -45,7 +45,13 @@ module.exports = class SpritesmithPlugin {
 
         this._hook(compiler, 'run', 'run',
             (compiler, cb) => {
-                this.compile(cb);
+                this.getWatcher()
+                    .on('ready', () => {
+                        this.compile(() => {
+                            this.getWatcher().close();
+                            cb();
+                        });
+                    })
             }
         );
 
