@@ -1,6 +1,7 @@
 const path = require('path');
 const chokidar = require('chokidar');
 const fs = require('mz/fs');
+const glob = require('glob');
 
 const processOptions = require('./processOptions');
 
@@ -45,13 +46,9 @@ module.exports = class SpritesmithPlugin {
 
         this._hook(compiler, 'run', 'run',
             (compiler, cb) => {
-                this.getWatcher()
-                    .on('ready', () => {
-                        this.compile(() => {
-                            this.getWatcher().close();
-                            cb();
-                        });
-                    })
+                this.compile(() => {
+                    cb();
+                });
             }
         );
 
@@ -95,15 +92,7 @@ module.exports = class SpritesmithPlugin {
             ? require('./compileRetina')
             : require('./compileNormal');
 
-        const sourceImagesByFolder = this.getWatcher().getWatched();
-
-        const allSourceImages = [];
-
-        for (const [key, value] of Object.entries(sourceImagesByFolder)) {
-            value.forEach((file) => {
-                allSourceImages.push(`${key}/${file}`)
-            })
-        }
+        const allSourceImages = glob.sync(this.options.src.glob, { cwd: this.options.src.cwd });
 
         const sourceImageBySpriteName = allSourceImages.reduce((sourceImageBySpriteName, sourceImage) => {
             const spriteName = this.options.apiOptions.generateSpriteName(sourceImage);
