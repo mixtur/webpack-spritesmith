@@ -2,12 +2,8 @@
   "name": "@wisdomgarden/webpack-spritesmith",
   "version": "2.0.1",
   "description": "Webpack plugin that converts set of images into a spritesheet and SASS/LESS/Stylus mixins",
-  "main": "lib/Plugin.js",
+  "main": "src/Plugin.js",
   "scripts": {
-    "build": "rimraf lib && babel src -d lib",
-    "prepack": "npm run build",
-    "dev": "npm run build && rimraf dev/src/generated && webpack --config dev/config.js",
-    "dev-watch": "npm run build && webpack --config dev/config.js --watch"
   },
   "repository": {
     "type": "git",
@@ -49,6 +45,6 @@
     "webpack-cli": "^3.3.0"
   },
   "directories": {
-    "lib": "lib"
+    "lib": "src"
   }
 }
