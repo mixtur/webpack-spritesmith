@@ -1,17 +1,13 @@
 {
-  "name": "webpack-spritesmith",
-  "version": "1.1.0",
+  "name": "@wisdomgarden/webpack-spritesmith",
+  "version": "2.0.1",
   "description": "Webpack plugin that converts set of images into a spritesheet and SASS/LESS/Stylus mixins",
-  "main": "lib/Plugin.js",
+  "main": "src/Plugin.js",
   "scripts": {
-    "build": "rimraf lib && babel src -d lib",
-    "prepack": "npm run build",
-    "dev": "npm run build && rimraf dev/src/generated && webpack --config dev/config.js",
-    "dev-watch": "npm run build && webpack --config dev/config.js --watch"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mixtur/webpack-spritesmith.git"
+    "url": "git+https://github.com/WisdomGardenInc/webpack-spritesmith.git"
   },
   "keywords": [
     "icons",
@@ -19,20 +15,21 @@
     "spritesmith",
     "webpack"
   ],
-  "author": "",
+  "author": "lms",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mixtur/webpack-spritesmith/issues"
+    "url": "https://github.com/WisdomGardenInc/webpack-spritesmith"
   },
-  "homepage": "https://github.com/mixtur/webpack-spritesmith#readme",
+  "homepage": "https://github.com/WisdomGardenInc/webpack-spritesmith",
   "dependencies": {
-    "gaze": "^1.1.3",
+    "chokidar": "^3.5.1",
     "loader-utils": "^1.2.3",
     "lodash": "^4.17.15",
     "mkdirp": "^0.5.1",
     "mz": "^2.7.0",
     "spritesheet-templates": "^10.4.2",
-    "spritesmith": "^3.4.0"
+    "spritesmith": "^3.4.0",
+    "glob": "^7.1.6"
   },
   "devDependencies": {
     "@babel/cli": "7.1.2",
@@ -46,5 +43,8 @@
     "stylus-loader": "^3.0.2",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
+  },
+  "directories": {
+    "lib": "src"
   }
 }

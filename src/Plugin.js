@@ -1,7 +1,7 @@
 const path = require('path');
-const gaze = require('gaze');
+const chokidar = require('chokidar');
 const fs = require('mz/fs');
-const {promiseCall} = require('./utils');
+const glob = require('glob');
 
 const processOptions = require('./processOptions');
 
@@ -27,22 +27,15 @@ module.exports = class SpritesmithPlugin {
         }
     }
 
-    getWatcher(cb) {
-        if (this._watcher) {
-            cb && cb(undefined, this._watcher);
-        } else {
-            this._watcher = gaze(
+    getWatcher() {
+        if (!this._watcher) {
+            this._watcher = chokidar.watch(
                 this.options.src.glob,
                 {
                     ...this.options.src.options,
-                    cwd: this.options.src.cwd
+                    cwd: this.options.src.cwd,
+                    ignoreInitial: true
                 },
-                (err, watcher) => {
-                    watcher.on('end', () => {
-                        this._watcher = null;
-                    })
-                    cb && cb(err, watcher);
-                }
             );
         }
         return this._watcher;
@@ -54,8 +47,6 @@ module.exports = class SpritesmithPlugin {
         this._hook(compiler, 'run', 'run',
             (compiler, cb) => {
                 this.compile(() => {
-                    // without closing the gaze instance, the build will never finish
-                    this.getWatcher().close();
                     cb();
                 });
             }
@@ -68,12 +59,23 @@ module.exports = class SpritesmithPlugin {
                 return watchRunCallback();
             }
             watchStarted = true;
-            this.getWatcher((err, watcher) => {
-                err && watchRunCallback(err);
-                watcher.on('all', () => {
-                    this.compile(() => {});
-                });
-            });
+
+            this.getWatcher()
+                .on('ready', () => {
+                    this.compile();
+                })
+                .on('add', () => {
+                    this.compile()
+                })
+                .on('change', () => {
+                    this.compile();
+                })
+                .on('unlink', () => {
+                    this.compile();
+                })
+                .on("error", (error) => {
+                    watchRunCallback(error)
+                })
 
             return this.compile(watchRunCallback);
         });
@@ -90,24 +92,22 @@ module.exports = class SpritesmithPlugin {
             ? require('./compileRetina')
             : require('./compileNormal');
 
-        const sourceImagesByFolder = this.getWatcher().watched();
-        const allSourceImages = Object.values(sourceImagesByFolder)
-                .reduce((allFiles, files) => [ ...allFiles, ...files ], [])
-                .filter(x => !x.endsWith(path.sep));
+        const allSourceImages = glob.sync(this.options.src.glob, { cwd: this.options.src.cwd });
 
         const sourceImageBySpriteName = allSourceImages.reduce((sourceImageBySpriteName, sourceImage) => {
-                const spriteName = this.options.apiOptions.generateSpriteName(sourceImage);
-                if (sourceImageBySpriteName[spriteName]) {
-                    if (this.options.logCreatedFiles) {
-                        const shortOldFile = path.relative(this.compilerContext, sourceImageBySpriteName[spriteName]);
-                        const shortReplacedFile = path.relative(this.compilerContext, sourceImage);
-                        this.metaOutput.warnings.push(`Sprite name collision for '${spriteName}': discarding '${shortOldFile}', using '${shortReplacedFile}'`);
-                    }
+            const spriteName = this.options.apiOptions.generateSpriteName(sourceImage);
+            if (sourceImageBySpriteName[spriteName]) {
+                if (this.options.logCreatedFiles) {
+                    const shortOldFile = path.relative(this.compilerContext, sourceImageBySpriteName[spriteName]);
+                    const shortReplacedFile = path.relative(this.compilerContext, sourceImage);
+                    this.metaOutput.warnings.push(`Sprite name collision for '${spriteName}': discarding '${shortOldFile}', using '${shortReplacedFile}'`);
                 }
-                sourceImageBySpriteName[spriteName] = sourceImage;
-                return sourceImageBySpriteName;
-            }, {}),
-            sourceImages = Object.values(sourceImageBySpriteName);
+            }
+            sourceImageBySpriteName[spriteName] = sourceImage;
+            return sourceImageBySpriteName;
+        }, {});
+
+        const sourceImages = Object.values(sourceImageBySpriteName);
 
         const compiledFilesPaths = await compileStrategy(
             this.options,
@@ -158,7 +158,10 @@ module.exports = class SpritesmithPlugin {
         );
     }
 
-    compile(compileCallback) {
+    compile(compileCallback = null) {
+        if (!compileCallback) {
+            compileCallback = () => { }
+        }
         this._compile().then(
             compileCallback,
             (err) => {
